@@ -15,6 +15,7 @@ fn main() {
 
     let last = bigscope(s5);
     println!("{} {}", last.0, last.1);
+
 }
 
 fn rescope(mut x: String) -> String {
