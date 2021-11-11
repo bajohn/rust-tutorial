@@ -1,3 +1,4 @@
+
 fn main() {
     let weird_bool = do_iter();
     let ret = match weird_bool {
