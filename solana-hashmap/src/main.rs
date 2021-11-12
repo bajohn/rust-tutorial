@@ -1,3 +1,4 @@
+use borsh::{BorshDeserialize, BorshSerialize};
 use std::collections::HashMap;
 
 struct User {
@@ -15,6 +16,12 @@ impl User {
         }
     }
 }
+/// Define the type of state stored in accounts
+#[derive(BorshSerialize, BorshDeserialize, Debug)]
+pub struct GreetingAccount {
+    /// number of greetings
+    pub counter: u32,
+}
 
 fn main() {
     println!("Hello, world!");
@@ -31,4 +38,29 @@ fn main() {
 
     println!("{} ", key1);
     println!("{} ", key2);
+
+    let mut k = vec![String::from("test")];
+    println!("{}", k.len());
+    k.push(String::from("another"));
+    println!("{}", k.len());
+
+    // greeting_account.counter += 1;
+    //let mut greeting_account = GreetingAccount::try_from_slice();
+    let mut greeting_account = GreetingAccount { counter: 2 };
+    println!("Original again {}", greeting_account.counter);
+
+    greeting_account.counter += 1;
+    let mut result = Vec::with_capacity(1000);
+
+    greeting_account.serialize(&mut result);
+
+    let deserialized = GreetingAccount::try_from_slice(&result).unwrap();
+    println!("Deserialized again {}", deserialized.counter);
 }
+// let unwrapped = match deserialized {
+//     Ok(t) => t,
+//     Err(e) => {
+//         println!("Error")
+//     }
+// };
+// unwrapped
