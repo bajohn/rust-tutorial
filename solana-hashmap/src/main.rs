@@ -1,4 +1,5 @@
 use borsh::{BorshDeserialize, BorshSerialize};
+
 use std::collections::HashMap;
 
 struct User {
@@ -40,7 +41,8 @@ fn main() {
     println!("{} ", key2);
 
     let mut k = vec![String::from("test")];
-    println!("{}", k.len());
+    let another = vec![4, 5, 6, 7, 8];
+    println!("{}", another[1..4][1]);
     k.push(String::from("another"));
     println!("{}", k.len());
 
@@ -55,8 +57,31 @@ fn main() {
     let mut result = Vec::with_capacity(1000);
 
     greeting_account.serialize(&mut result);
+    println!("Origin length {}", result.len());
 
-    let deserialized = GreetingAccount::try_from_slice(&result).unwrap();
+    let resp = truncate_vec(&result[..]);
+    let truncatedVec = Vec::from(&result[0..resp]);
+    println!("Final {}", truncatedVec.len());
+    let deserialized = GreetingAccount::try_from_slice(&truncatedVec).unwrap();
     println!("Deserialized again {}", deserialized.aword);
 }
 
+fn truncate_vec(vecIn: &[u8]) -> usize {
+    let mut i = vecIn.len();
+    let mut truncIdx = 0;
+    let mut ret: usize = 0;
+    while i > 0 {
+        i -= 1;
+        match vecIn.get(i) {
+            Some(num) => {
+                if *num != 0 {
+                    ret = i+1;
+                    break;
+                }
+                println!("Found {}", num);
+            }
+            None => println!("Not found!"),
+        }
+    }
+    ret
+}
