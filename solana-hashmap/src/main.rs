@@ -54,12 +54,14 @@ fn main() {
     println!("Original  {}", greeting_account.aword);
 
     greeting_account.aword = String::from("another one");
-    let mut result = Vec::with_capacity(1000);
+    let mut result = Vec::new();
 
     greeting_account.serialize(&mut result);
+
     println!("Origin length {}", result.len());
 
     let resp = truncate_vec(&result[..]);
+
     let truncatedVec = Vec::from(&result[0..resp]);
     println!("Final {}", truncatedVec.len());
     let deserialized = GreetingAccount::try_from_slice(&truncatedVec).unwrap();
